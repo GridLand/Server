@@ -27,4 +27,22 @@ router.get('/add/:id/:time/:game', function (req, res) {
     })
 });
 
+//골드 정보
+router.get('/gold/:id', function (req, res) {
+    var id = parseInt(req.params.id);
+
+    pool.getConnection(function (err, conn) {
+        var sqlForGetGold= 'SELECT gold FROM users WHERE idx='+id;
+        conn.query(sqlForGetGold,function (err, result) {
+            if (err) {
+                conn.release();
+                throw err;
+            } else {
+                res.json(result);
+                conn.release();
+            }
+        })
+    })
+});
+
 module.exports = router;
