@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var pool = require('../config/db')();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -7,13 +8,14 @@ router.get('/', function(req, res, next) {
 });
 
 //기록 저장
-router.get('/add/:id/:time', function (req, res) {
-    var id = req.params.id;
-    var time = req.params.time;
+router.get('/add/:id/:time/:game', function (req, res) {
+    var id = parseInt(req.params.id);
+    var time = parseInt(req.params.time);
+    var game = parseInt(req.params.game);
 
     pool.getConnection(function (err, conn) {
-        var sqlForAddRecord= 'INSERT INTO records(player, time, date) VALUES (?, ?,NOW())';
-        conn.query(sqlForAddRecord, [id, time], function (err, row) {
+        var sqlForAddRecord= 'INSERT INTO records(player, play_time, date, game_number) VALUES (?, ?,NOW(), ?)';
+        conn.query(sqlForAddRecord, [id, time, game], function (err, row) {
             if (err) {
                 conn.release();
                 throw err;
