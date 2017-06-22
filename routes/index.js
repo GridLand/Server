@@ -63,4 +63,20 @@ router.get('/update/:gold', function (req, res) {
     })
 });
 
+//기록
+router.get('/record', function (req, res) {
+
+    pool.getConnection(function (err, conn) {
+        var sqlForGetRecord= 'SELECT * FROM records';
+        conn.query(sqlForGetRecord,function (err, result) {
+            if (err) {
+                conn.release();
+                throw err;
+            } else {
+                res.json(result);
+                conn.release();
+            }
+        })
+    })
+});
 module.exports = router;
