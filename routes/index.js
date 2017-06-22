@@ -45,4 +45,22 @@ router.get('/gold/:id', function (req, res) {
     })
 });
 
+//골드 수정
+router.get('/update/:gold', function (req, res) {
+    var gold = parseInt(req.params.gold);
+
+    pool.getConnection(function (err, conn) {
+        var sqlForUpdateGold= 'UPDATE users SET gold=? WHERE idx=1';
+        conn.query(sqlForUpdateGold,[gold], function (err, result) {
+            if (err) {
+                conn.release();
+                throw err;
+            } else {
+                res.json("ok");
+                conn.release();
+            }
+        })
+    })
+});
+
 module.exports = router;
